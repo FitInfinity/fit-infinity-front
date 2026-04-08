@@ -1,6 +1,6 @@
-<aside class="sidebar">
+<aside class="sidebar" [class.collapsed]="isCollapsed()">
   <div class="logo sidebar__logo">
-    <svg class="icon32" icon="logo"></svg>
+    <svg class="icon32 logo__svg" icon="logo"></svg>
     <p class="logo__name">
       <span>Fit</span>Infinity
     </p>
@@ -18,6 +18,10 @@
       }
     </ul>
   </nav>
+
+  <button class="sidebar__toggle-btn toggle-btn" (click)="toggle()">
+    <svg class="icon17 toggle-btn__icon" icon="chevrons-left"></svg>
+  </button>
 
   @if (profile(); as profile) {
     <a class="sidebar__footer" routerLink="profile" routerLinkActive="active">

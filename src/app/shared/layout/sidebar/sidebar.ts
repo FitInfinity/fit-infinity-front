@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {SvgIcon} from '../../components/svg-icon/svg-icon';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {ProfileService} from '../../services/profile.service';
@@ -16,6 +16,8 @@ import {ProfileService} from '../../services/profile.service';
 export class Sidebar implements OnInit {
   profileService = inject(ProfileService);
   profile = this.profileService.profile;
+
+  isCollapsed = signal(false);
 
   navLinks = [
     {
@@ -47,5 +49,9 @@ export class Sidebar implements OnInit {
 
   ngOnInit() {
     this.profileService.getMe().subscribe();
+  }
+
+  toggle() {
+    this.isCollapsed.update(v => !v);
   }
 }
