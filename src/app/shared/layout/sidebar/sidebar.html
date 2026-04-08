@@ -1,0 +1,30 @@
+<aside class="sidebar">
+  <div class="logo sidebar__logo">
+    <svg class="icon32" icon="logo"></svg>
+    <p class="logo__name">
+      <span>Fit</span>Infinity
+    </p>
+  </div>
+
+  <nav class="nav sidebar__nav">
+    <ul class="nav__list">
+      @for(link of navLinks; track link.label) {
+        <li class="nav__item">
+          <a class="nav__link" [routerLink]="link.to" routerLinkActive="active">
+            <svg class="icon17 nav__icon" [icon]="link.icon"></svg>
+            <span class="nav__label">{{ link.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  @if (profile(); as profile) {
+    <a class="sidebar__footer" routerLink="profile" routerLinkActive="active">
+      <div class="user sidebar__user">
+        <img src="/assets/images/avatar-placeholder.png" class="image32" alt="" />
+        <p class="user__full-name">{{ profile?.firstName }} {{ profile?.lastName }}</p>
+      </div>
+    </a>
+  }
+</aside>

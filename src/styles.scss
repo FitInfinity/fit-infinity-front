@@ -1,1 +1,387 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --color-white: #ffffff;
+  --color-primary: #6b7eff;
+  --color-success: #52b788;
+
+  --color-background-page: #efeff8;
+  --color-background-layout: #ffffff;
+
+  --color-surface: #eef0f8;
+  --color-border: #e8eaf2;
+
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #8891a4;
+
+  --color-danger-border: #fecaca;
+  --color-danger-text: #ef4444;
+
+  --color-bg-workout-status-planned: rgba(107, 126, 255, 0.1);
+  --color-bg-workout-status-completed: rgba(82, 183, 136, 0.1);
+  --color-bg-workout-status-cancelled: rgba(239, 68, 68, 0.1);
+
+  --color-text-workout-status-planned: var(--color-primary);
+  --color-text-workout-status-completed: #52b788;
+  --color-text-workout-status-cancelled: #ef4444;
+
+  --box-shadow: 0 2px 16px 0 rgba(107, 126, 255, 0.07);
+
+  --font-family: 'Inter', sans-serif;
+}
+
+.dark-theme {
+  --color-white: #ffffff;
+  --color-primary: #6b7eff;
+  --color-success: #52b788;
+
+  --color-background-page: #1B2338;
+  --color-background-layout: #252F47;
+
+  --color-surface: #2E3A55;
+  --color-border: #2e3a55;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #8891b4;
+
+  --color-danger-border: #842226;
+  --color-danger-text: #ce4856;
+
+  --box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.25);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-background-page);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul li {
+  list-style: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+button,
+input,
+textarea {
+  font-family: var(--font-family);
+}
+
+/* container */
+.container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.widget {
+  height: max-content;
+  padding: 20px;
+  background: var(--color-background-layout);
+  box-shadow: var(--box-shadow);
+  border-radius: 20px;
+}
+
+// icons
+.icon16 {
+  width: 16px;
+  height: 16px;
+}
+
+.icon17 {
+  width: 17px;
+  height: 17px;
+}
+
+.icon32 {
+  width: 32px;
+  height: 32px;
+}
+
+.icon40 {
+  width: 40px;
+  height: 40px;
+}
+
+/* margins */
+.mb4 {
+  margin-bottom: 4px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+/* btns */
+.btn {
+  padding: 12px;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 143%;
+  text-align: center;
+  background: transparent;
+  border: none;
+
+  &:disabled {
+    opacity: .3;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-radius: 16px;
+}
+
+.btn-secondary {
+  color: var(--color-primary);
+  background: transparent;
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.btn-success {
+  color: var(--color-white);
+  background-color: var(--color-success);
+  border-radius: 16px;
+}
+
+.btn-danger {
+  color: var(--color-danger-text);
+  border: 2px solid var(--color-danger-border);
+  border-radius: 16px;
+}
+
+.btn-show-password {
+  width: 37px;
+  height: 37px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+
+  &.active {
+    color: var(--color-primary);
+  }
+}
+
+.btn-icon {
+  padding: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+
+  &:hover {
+    border-radius: 8px;
+    background-color: var(--color-surface);
+  }
+}
+
+/* h */
+.h2 {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  color: var(--color-text-primary)
+}
+
+.h3 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 143%;
+  color: var(--color-text-primary)
+}
+
+.h4 {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 133%;
+  color: var(--color-text-primary)
+}
+
+/* p */
+.center {
+  text-align: center;
+}
+
+.medium-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 133%;
+  color: var(--color-text-primary);
+}
+
+.small-text {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 133%;
+  color: var(--color-text-secondary);
+}
+
+/* v-calendar */
+.vc-container {
+  color: var(--color-text-primary);
+  background-color: var(--color-background-layout);
+}
+
+.vc-header {
+  margin-bottom: 10px;
+}
+
+.vc-header .vc-title {
+  padding: 0;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 143%;
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+  background: transparent;
+}
+
+.vc-header .vc-arrow {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+}
+
+.vc-bordered {
+  border: none;
+  border-radius: 0;
+}
+
+.vc-dots {
+  /*position: relative;*/
+  /*bottom: -6px;*/
+}
+
+/* completed — зелёный */
+.vc-dot.vc-green {
+  background-color: #52b788 !important;
+}
+
+/* missed/cancelled — красный */
+.vc-dot.vc-red {
+  background-color: #ef4444 !important;
+}
+
+/* planned — твой primary */
+.vc-dot.vc-blue {
+  background-color: #6b7eff !important;
+}
+
+.vc-highlight-content-solid.vc-blue {
+  background-color: #6b7eff !important;
+}
+
+.vc-focus:focus-within {
+  box-shadow: none
+}
+
+.vc-day-content:hover {
+  background-color: rgba(107, 126, 255, 0.3)
+}
+
+.vc-day {
+  min-height: 42px;
+}
+
+/* workout-session statuses*/
+.workout-session-status {
+  max-width: max-content;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 133%;
+  text-transform: capitalize;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+
+  &.planned {
+    color: var(--color-text-workout-status-planned);
+    background-color: var(--color-bg-workout-status-planned);
+  }
+
+  &.completed {
+    color: var(--color-text-workout-status-completed);
+    background-color: var(--color-bg-workout-status-completed);
+  }
+
+  &.cancelled {
+    color: var(--color-text-workout-status-cancelled);
+    background-color: var(--color-bg-workout-status-cancelled);
+  }
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.status-text {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 133%;
+
+  &.planned {
+    color: var(--color-text-workout-status-planned);
+  }
+
+  &.completed {
+    color: var(--color-text-workout-status-completed);
+  }
+
+  &.cancelled {
+    color: var(--color-text-workout-status-cancelled);
+  }
+}
+
+/* form */
+.form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 133%;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}

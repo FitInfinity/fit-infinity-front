@@ -1,0 +1,47 @@
+<div class="login-page">
+  <div class="login-page__container">
+    <div class="login-page__brand">
+      <svg class="login-page__brand-icon icon40" icon="logo"></svg>
+      <p class="login-page__brand-name">
+        <span class="login-page__brand-name-accent">Fit</span>Infinity
+      </p>
+    </div>
+
+    <form class="login-page__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label class="login-page__field">
+        <span class="login-page__label">Email</span>
+
+        <span class="login-page__input-wrapper">
+          <input
+            class="login-page__input"
+            type="email"
+            placeholder="Введите email"
+            autocomplete="email"
+            formControlName="email"
+          >
+        </span>
+      </label>
+
+      <label class="login-page__field">
+        <span class="login-page__label">Пароль</span>
+
+        <span class="login-page__input-wrapper login-page__input-wrapper--password">
+          <input
+            class="login-page__input"
+            type="password"
+            placeholder="Введите пароль"
+            autocomplete="current-password"
+            formControlName="password"
+          >
+          <button class="login-page__show-password" type="button">
+            <svg class="login-page__input-icon icon16" icon="eye"></svg>
+          </button>
+        </span>
+      </label>
+
+      <button class="login-page__submit btn btn-primary" type="submit">
+        Войти
+      </button>
+    </form>
+  </div>
+</div>
