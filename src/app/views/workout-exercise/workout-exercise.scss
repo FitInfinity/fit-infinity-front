@@ -1,0 +1,188 @@
+.workout-exercise {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    &__search {
+      position: relative;
+      width: 100%;
+    }
+
+    &__icon {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    &__input {
+      width: 100%;
+      padding: 8px 12px 8px 36px;
+      font-weight: 400;
+      font-size: 14px;
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      background: var(--color-background-page);
+
+      &::placeholder {
+        color: var(--color-text-secondary);
+      }
+
+      &:focus {
+        outline: 2px solid rgba(107, 126, 255, 0.3);
+      }
+    }
+
+    &__categories {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &__category {
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 133%;
+      text-align: center;
+      white-space: nowrap;
+      color: var(--color-text-secondary);
+      background-color: var(--color-background-layout);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+
+      &.active {
+        color: var(--color-white);
+        background-color: var(--color-primary);
+      }
+    }
+  }
+
+  .exercise-list {
+    &__items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-gap: 12px;
+    }
+
+    .exercise-card {
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--color-background-layout);
+      border: 1px solid transparent;
+      box-shadow: 0 2px 16px 0 var(--box-shadow);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: var(--color-primary);
+      }
+
+      &--highlighted {
+        box-shadow: 0 0 0 2px var(--color-primary), 0 2px 16px 0 var(--box-shadow);
+        animation: highlight-fade 2s ease forwards;
+      }
+
+      &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      &__title {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 143%;
+        color: var(--color-text-primary);
+      }
+
+      &__muscle-group {
+        padding: 2px 6px;
+        max-width: max-content;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 133%;
+        text-transform: capitalize;
+        color: var(--color-primary);
+        background: rgba(107, 126, 255, 0.1);
+        border-radius: 9999px;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 24px;
+
+    &__btn, &__page {
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 133%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-secondary);
+      background-color: var(--color-background-layout);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      cursor: pointer;
+
+      &:hover:not(:disabled) {
+        color: var(--color-primary);
+        background-color: rgba(107, 126, 255, 0.07);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+
+    &__page.active {
+      color: var(--color-white);
+      background-color: var(--color-primary);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .filter {
+      flex-direction: column;
+      align-items: flex-start;
+
+      &__categories {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+    }
+
+    .exercise-list {
+      &__items {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+    }
+  }
+
+  @media screen and (max-width: 425px) {
+    &__header {
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+}

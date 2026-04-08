@@ -41,6 +41,11 @@ export class Sidebar implements OnInit {
       to: '/workout-program',
     },
     {
+      label: 'Упражнения',
+      icon: 'sport-shoe',
+      to: '/workout-exercise',
+    },
+    {
       label: 'Статистика',
       icon: 'statistics',
       to: '/statistics',

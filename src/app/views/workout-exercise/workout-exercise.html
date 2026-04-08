@@ -1,0 +1,81 @@
+<div class="workout-exercise">
+  <div class="workout-exercise__header mb20">
+    <h2 class="h2">Упражнения</h2>
+    <button class="btn btn-primary workout-exercise__btn" (click)="showCreateModal()">
+      <svg icon="plus" class="icon17"></svg>
+      Создать упражнение
+    </button>
+  </div>
+
+  <div class="content workout-exercise__content">
+
+    <div class="filter content__filter mb16">
+
+      <!-- Поиск упражнения по названию -->
+      <div class="filter__search">
+        <svg class="icon17 filter__icon" icon="search"></svg>
+        <input class="filter__input" type="text" placeholder="Искать упражнение..." [formControl]="search">
+      </div>
+
+      <!-- Фильтр упражнений по категориям -->
+      <ul class="filter__categories">
+        <li class="filter__category"
+            [class.active]="!activeCategory()"
+            (click)="resetCategory()"
+        >
+          Все
+        </li>
+
+        @for (cat of categories; track cat) {
+          <li class="filter__category"
+              [class.active]="activeCategory() === cat"
+              (click)="selectCategory(cat)"
+          >
+            {{ translateExerciseCategory(cat) }}
+          </li>
+        }
+
+      </ul>
+    </div>
+
+    <!-- Список упражнений -->
+    <div class="exercise-list content__exercise-list">
+      @if (exercises().length) {
+        <ul class="exercise-list__items">
+          @for (item of exercises(); track item.id) {
+            <li class="exercise-card"
+                (click)="showViewModal(item)">
+              <div class="exercise-card__info">
+                <div class="exercise-card__title">{{ item.name }}</div>
+                <div class="exercise-card__muscle-group">{{ translateMuscleGroup(item.muscleGroup) }}</div>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="small-text center">Создайте первое упражнение</p>
+      }
+    </div>
+
+    <!-- Пагинация -->
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button class="pagination__btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">
+          <svg class="icon17" icon="chevron-left"></svg>
+        </button>
+
+        @for (page of pages(); track page) {
+          <button class="pagination__page" [class.active]="page === currentPage()" (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+
+        <button class="pagination__btn" [disabled]="currentPage() === totalPages()"
+                (click)="goToPage(currentPage() + 1)">
+          <svg class="icon17" icon="chevron-right"></svg>
+        </button>
+      </div>
+    }
+
+  </div>
+</div>

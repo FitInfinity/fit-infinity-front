@@ -1,0 +1,56 @@
+.exercise-view {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  &__name {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-text-primary);
+  }
+
+  &__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  &__section {
+    padding: 12px 0;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    & + & {
+      border-top: 1px solid var(--color-border);
+    }
+  }
+
+  &__label {
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  &__value {
+    font-size: 14px;
+    line-height: 143%;
+    color: var(--color-text-primary);
+  }
+
+  &__badge {
+    padding: 2px 8px;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--color-primary);
+    background: rgba(107, 126, 255, 0.1);
+    border-radius: 9999px;
+  }
+}

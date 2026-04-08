@@ -24,6 +24,10 @@ export const routes: Routes = [
         loadComponent: () => import('./views/workout-program/workout-program').then(c => c.WorkoutProgram),
       },
       {
+        path: 'workout-exercise',
+        loadComponent: () => import('./views/workout-exercise/workout-exercise').then(c => c.WorkoutExercise),
+      },
+      {
         path: 'statistics',
         loadComponent: () => import('./views/statistics/statistics').then(c => c.Statistics),
       },

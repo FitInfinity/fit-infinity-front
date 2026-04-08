@@ -1,0 +1,83 @@
+<app-modal-base>
+  <div class="common-modal">
+    <div class="common-modal__header mb20">
+      <h3 class="h3">{{ modalTitle() }}</h3>
+      <button class="common-modal__close-btn" (click)="onClose()">
+        <svg icon="cross" class="icon24"></svg>
+      </button>
+    </div>
+
+    <div class="common-modal__content">
+      @if (isEditing()) {
+        <form id="formWorkoutExercise" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <label class="form-label mb20">
+            <span class="label-text">Название упражнения</span>
+            <input class="form-input" type="text" formControlName="name">
+          </label>
+
+          <label class="form-label mb20">
+            <span class="label-text">Мышечная группа</span>
+            <select class="form-input" formControlName="muscleGroup">
+              <option value="" disabled>Выберите группу мышц</option>
+              @for (group of muscleGroups; track group) {
+                <option [value]="group">{{ translateMuscleGroup(group) }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="form-label mb20">
+            <span class="label-text">Описание</span>
+            <textarea class="form-textarea" formControlName="description"></textarea>
+          </label>
+
+          <label class="form-label mb20">
+            <span class="label-text">Рекомендации</span>
+            <textarea class="form-textarea" formControlName="tip"></textarea>
+          </label>
+        </form>
+      } @else {
+        <div class="exercise-view">
+          <div class="exercise-view__section">
+            <div class="exercise-view__label">Название упражнения</div>
+            <div class="exercise-view__name">{{ workoutExercise()!.name }}</div>
+          </div>
+
+          <div class="exercise-view__section">
+            <div class="exercise-view__label">Мышечная группа</div>
+            <div class="exercise-view__value">
+              <span class="exercise-view__badge">{{ translateMuscleGroup(workoutExercise()!.muscleGroup) }}</span>
+            </div>
+          </div>
+
+          @if (workoutExercise()!.description) {
+            <div class="exercise-view__section">
+              <div class="exercise-view__label">Описание</div>
+              <div class="exercise-view__value">{{ workoutExercise()!.description }}</div>
+            </div>
+          }
+
+          @if (workoutExercise()!.tip) {
+            <div class="exercise-view__section">
+              <div class="exercise-view__label">Рекомендации</div>
+              <div class="exercise-view__value">{{ workoutExercise()!.tip }}</div>
+            </div>
+          }
+        </div>
+
+        @if (workoutExercise()!.isCustom) {
+          <div class="exercise-view__actions">
+            <button class="btn btn-primary" type="button" (click)="toggleEdit()"> <svg icon="pen" class="icon16"></svg> Редактировать</button>
+            <button class="btn btn-danger" type="button" (click)="onDelete()"><svg icon="trash" class="icon16"></svg> Удалить</button>
+          </div>
+        }
+      }
+    </div>
+
+    @if (isEditing()) {
+      <div class="common-modal__action-btns">
+        <button class="btn btn-primary" type="submit" form="formWorkoutExercise">Сохранить</button>
+        <button class="btn btn-secondary" type="button" (click)="onCancel()">Отмена</button>
+      </div>
+    }
+  </div>
+</app-modal-base>
