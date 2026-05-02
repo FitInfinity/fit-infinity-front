@@ -3,8 +3,7 @@ import {ModalBase} from '../../../../shared/components/modal/modal-base/modal-ba
 import {SvgIcon} from '../../../../shared/components/svg-icon/svg-icon';
 import {ModalService} from '../../../../shared/components/modal/services/modal.service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {WorkoutExerciseService} from '../../../../shared/services/workout-exercise.service';
-import {IWorkoutExercise, MuscleGroup} from '../../../../interfaces/workout-exercise.interface';
+import {IWorkoutExercise} from '../../../../interfaces/workout-exercise.interface';
 import {translateMuscleGroup} from '../../../../shared/utils/muscle-group.utils';
 import { translateProgramType } from '../../../../shared/utils/workout-program.utils';
 import {IProgramExercise, IWorkoutProgram, ProgramType} from '../../../../interfaces/workout-program.interface';
@@ -61,12 +60,13 @@ export class WorkoutProgramSettingsModal implements OnInit {
   }
 
   ngOnInit() {
-    this.program.set(this.workoutProgram());
     const prog = this.workoutProgram();
 
     if (prog) {
-      this.form.patchValue({ name: prog.name, type: prog.type });
-      // TODO: загрузить упражнения программы
+      this.setProgram(prog);
+      this.programService.getProgram(prog.id).subscribe({
+        next: program => this.setProgram(program),
+      });
     } else {
       this.isEditing.set(true);
     }
@@ -75,10 +75,7 @@ export class WorkoutProgramSettingsModal implements OnInit {
   // --- Упражнения ---
 
   openAddExerciseModal() {
-    this.modalService.show(WorkoutProgramAddExerciseModal).subscribe(); // откроется поверх
-
-    // Но нам нужен результат. Используем другой подход:
-    // Модалка вернёт результат через result output
+    this.modalService.show(WorkoutProgramAddExerciseModal).subscribe();
   }
 
   addExercises(selected: IWorkoutExercise[]) {
@@ -148,7 +145,7 @@ export class WorkoutProgramSettingsModal implements OnInit {
     request$.subscribe({
       next: (result) => {
         if (prog) {
-          this.program.set(result as IWorkoutProgram);
+          this.setProgram(result as IWorkoutProgram);
           this.isEditing.set(false);
         } else {
           this.modalService.hide();
@@ -158,7 +155,10 @@ export class WorkoutProgramSettingsModal implements OnInit {
   }
 
   onCancel() {
-    if (this.program()) {
+    const program = this.program();
+
+    if (program) {
+      this.setProgram(program);
       this.isEditing.set(false);
     } else {
       this.modalService.hide();
@@ -179,6 +179,12 @@ export class WorkoutProgramSettingsModal implements OnInit {
 
   toggleEdit() {
     this.isEditing.set(true);
+  }
+
+  private setProgram(program: IWorkoutProgram): void {
+    this.program.set(program);
+    this.form.patchValue({ name: program.name, type: program.type });
+    this.exercises.set(program.exercises ?? []);
   }
 
   protected readonly translateProgramType = translateProgramType;

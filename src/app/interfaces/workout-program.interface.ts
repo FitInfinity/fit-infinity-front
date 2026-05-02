@@ -7,6 +7,7 @@ export interface IWorkoutProgram {
   isActive: boolean;
   isCustom: boolean;
   exerciseCount: number;
+  exercises: IProgramExercise[];
   createdAt: string;
 }
 
@@ -20,7 +21,10 @@ export interface IWorkoutProgramListResponse {
 export interface IWorkoutProgramCreate {
   name: string;
   type: ProgramType;
+  exercises?: IProgramExercisePayload[];
 }
+
+export type IWorkoutProgramUpdate = Partial<IWorkoutProgramCreate & { isActive: boolean }>;
 
 export enum ProgramType {
   Strength = 'strength',
@@ -40,6 +44,13 @@ export interface IProgramExercise {
   exerciseId: number;
   name: string;
   muscleGroup: MuscleGroup;
+  sets: number;
+  reps: number;
+  order: number;
+}
+
+export interface IProgramExercisePayload {
+  exerciseId: number;
   sets: number;
   reps: number;
   order: number;

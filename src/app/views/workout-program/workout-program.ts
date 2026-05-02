@@ -87,7 +87,7 @@ export class WorkoutProgram implements OnInit {
   }
 
   showViewModal(program: IWorkoutProgram) {
-    // this.modalService.show(WorkoutProgramSettingsModal, { workoutProgram: program });
+    this.modalService.show(WorkoutProgramSettingsModal, { workoutProgram: program });
   }
 
   deleteProgram(id: number) {

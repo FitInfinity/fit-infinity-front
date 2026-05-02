@@ -2,8 +2,10 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {inject, Injectable, signal} from '@angular/core';
 import { BASE_API_URL } from '../../app.config';
 import {
-  IWorkoutProgram, IWorkoutProgramCreate,
+  IWorkoutProgram,
+  IWorkoutProgramCreate,
   IWorkoutProgramListResponse,
+  IWorkoutProgramUpdate,
   ProgramCategory
 } from '../../interfaces/workout-program.interface';
 import {map, switchMap, tap} from 'rxjs';
@@ -28,7 +30,11 @@ export class WorkoutProgramService {
       .pipe(tap(res => {
         this.programs.set(res.items);
         this.total.set(res.total);
-      }));
+    }));
+  }
+
+  getProgram(id: number) {
+    return this.http.get<IWorkoutProgram>(`${this.baseApiUrl}/programs/${id}`);
   }
 
   createProgram(payload: IWorkoutProgramCreate) {
@@ -36,7 +42,7 @@ export class WorkoutProgramService {
       .pipe(switchMap(res => this.getPrograms().pipe(map(() => res))));
   }
 
-  updateProgram(id: number, payload: Partial<IWorkoutProgramCreate & { isActive: boolean }>) {
+  updateProgram(id: number, payload: IWorkoutProgramUpdate) {
     return this.http.put<IWorkoutProgram>(`${this.baseApiUrl}/programs/${id}`, payload)
       .pipe(tap(updated => this.programs.update(list =>
         list.map(p => p.id === id ? updated : p)
