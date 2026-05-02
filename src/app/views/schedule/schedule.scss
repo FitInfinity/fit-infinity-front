@@ -32,6 +32,17 @@
     gap: 12px;
   }
 
+  &__details-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  &__details-action--danger {
+    color: var(--color-danger-text);
+  }
+
   &__details-content {
     display: flex;
     flex-direction: column;

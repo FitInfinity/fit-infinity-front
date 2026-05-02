@@ -1,10 +1,11 @@
-import { Component, inject, input, InputSignal, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, InputSignal, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ModalBase } from '../../../../shared/components/modal/modal-base/modal-base';
 import { SvgIcon } from '../../../../shared/components/svg-icon/svg-icon';
 import { ModalService } from '../../../../shared/components/modal/services/modal.service';
 import { WorkoutProgramService } from '../../../../shared/services/workout-program.service';
 import { WorkoutSessionService } from '../../../../shared/services/workout-session.service';
+import { IWorkoutSession } from '../../../../interfaces/workout-session.interface';
 
 @Component({
   selector: 'app-workout-session-create-modal',
@@ -18,7 +19,9 @@ export class WorkoutSessionCreateModal implements OnInit {
   private workoutSessionService = inject(WorkoutSessionService);
 
   selectedDate: InputSignal<string> = input<string>('');
+  workoutSession = input<IWorkoutSession | null>(null);
   programs = this.programService.programs;
+  modalTitle = computed(() => this.workoutSession() ? 'Редактировать тренировку' : 'Запланировать тренировку');
   isSaving = signal(false);
   error = signal('');
 
@@ -29,11 +32,15 @@ export class WorkoutSessionCreateModal implements OnInit {
   });
 
   ngOnInit(): void {
-    this.form.patchValue({ date: this.selectedDate() });
+    const session = this.workoutSession();
 
-    if (!this.programs().length) {
-      this.programService.getPrograms({ perPage: 100 }).subscribe();
-    }
+    this.form.patchValue({
+      date: session?.date ?? this.selectedDate(),
+      workoutProgramId: session?.workoutProgram?.id ?? null,
+      notes: session?.notes ?? '',
+    });
+
+    this.programService.getPrograms({ perPage: 100 }).subscribe();
   }
 
   onSubmit(): void {
@@ -43,17 +50,23 @@ export class WorkoutSessionCreateModal implements OnInit {
     }
 
     const { date, workoutProgramId, notes } = this.form.getRawValue();
+    const session = this.workoutSession();
     this.isSaving.set(true);
     this.error.set('');
 
-    this.workoutSessionService.createSession({
+    const payload = {
       date,
       workoutProgramId,
       notes: notes || null,
-    }).subscribe({
+    };
+    const request = session
+      ? this.workoutSessionService.updateSession(session.id, payload)
+      : this.workoutSessionService.createSession(payload);
+
+    request.subscribe({
       next: () => this.modalService.hide(),
       error: () => {
-        this.error.set('Не удалось запланировать тренировку');
+        this.error.set(session ? 'Не удалось сохранить тренировку' : 'Не удалось запланировать тренировку');
         this.isSaving.set(false);
       },
     });

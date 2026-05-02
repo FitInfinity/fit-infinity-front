@@ -4,6 +4,7 @@ import { WorkoutCalendar } from '../../shared/components/workout-calendar/workou
 import { WorkoutSessionService } from '../../shared/services/workout-session.service';
 import { ModalService } from '../../shared/components/modal/services/modal.service';
 import {
+  IWorkoutSession,
   WORKOUT_SESSION_STATUSES,
   WorkoutSessionStatus,
 } from '../../interfaces/workout-session.interface';
@@ -16,10 +17,11 @@ import {
 import {
   WorkoutSessionCreateModal,
 } from './ui/workout-session-create-modal/workout-session-create-modal';
+import { SvgIcon } from '../../shared/components/svg-icon/svg-icon';
 
 @Component({
   selector: 'app-schedule',
-  imports: [RouterLink, WorkoutCalendar],
+  imports: [RouterLink, WorkoutCalendar, SvgIcon],
   templateUrl: './schedule.html',
   styleUrl: './schedule.scss',
 })
@@ -74,6 +76,26 @@ export class Schedule implements OnInit {
     this.modalService.show(WorkoutSessionCreateModal, {
       selectedDate: this.selectedDate(),
     }).subscribe();
+  }
+
+  showUpdateModal(session: IWorkoutSession): void {
+    this.modalService.show(WorkoutSessionCreateModal, {
+      workoutSession: session,
+    }).subscribe();
+  }
+
+  deleteWorkoutSession(session: IWorkoutSession): void {
+    const isConfirmed = confirm('Удалить эту тренировку из расписания?');
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    this.workoutSessionService.deleteSession(session.id).subscribe({
+      next: () => {
+        this.activeSessionIndex.update(index => Math.min(index, this.totalSlides() - 1));
+      },
+    });
   }
 
   private loadMonth(year: number, month: number): void {

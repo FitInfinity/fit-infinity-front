@@ -6,7 +6,9 @@ import {
   IWorkoutSession,
   IWorkoutSessionCreate,
   IWorkoutSessionListResponse,
+  IWorkoutSessionUpdate,
 } from '../../interfaces/workout-session.interface';
+import { toDateKey } from '../utils/date.utils';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutSessionService {
@@ -62,18 +64,52 @@ export class WorkoutSessionService {
       .post<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions`, payload)
       .pipe(
         tap(session => {
-          this.workoutSessions.update(current => this.mergeSessions(current, [session]));
-          this.upcomingWorkoutSessions.update(current => this.mergeSessions(current, [session])
-            .sort((a, b) => a.date.localeCompare(b.date))
-            .slice(0, 7));
+          this.upsertSession(session);
         }),
       );
   }
 
-  private mergeSessions(current: IWorkoutSession[], incoming: IWorkoutSession[]) {
-    const currentIds = new Set(current.map(session => session.id));
-    const nextSessions = incoming.filter(session => !currentIds.has(session.id));
+  updateSession(id: number, payload: IWorkoutSessionUpdate) {
+    return this.http
+      .put<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions/${id}`, payload)
+      .pipe(
+        tap(session => {
+          this.upsertSession(session);
+        }),
+      );
+  }
 
-    return [...current, ...nextSessions];
+  deleteSession(id: number) {
+    return this.http
+      .delete(`${this.baseApiUrl}/workout-sessions/${id}`)
+      .pipe(
+        tap(() => {
+          this.workoutSessions.update(current => current.filter(session => session.id !== id));
+          this.upcomingWorkoutSessions.update(current => current.filter(session => session.id !== id));
+          this.workoutSessionByPage.update(current => current.filter(session => session.id !== id));
+        }),
+      );
+  }
+
+  private upsertSession(session: IWorkoutSession): void {
+    this.workoutSessions.update(current => this.mergeSessions(current, [session]));
+    this.workoutSessionByPage.update(current => this.mergeSessions(current, [session]));
+    this.upcomingWorkoutSessions.update(current => {
+      const today = toDateKey(new Date());
+
+      return this.mergeSessions(current, [session])
+        .filter(item => item.status === 'planned' && item.date >= today)
+        .sort((a, b) => a.date.localeCompare(b.date))
+        .slice(0, 7);
+    });
+  }
+
+  private mergeSessions(current: IWorkoutSession[], incoming: IWorkoutSession[]) {
+    const incomingById = new Map(incoming.map(session => [session.id, session]));
+    const existing = current.map(session => incomingById.get(session.id) ?? session);
+    const existingIds = new Set(current.map(session => session.id));
+    const nextSessions = incoming.filter(session => !existingIds.has(session.id));
+
+    return [...existing, ...nextSessions];
   }
 }

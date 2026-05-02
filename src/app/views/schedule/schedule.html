@@ -43,6 +43,27 @@
     <section class="widget schedule__details">
       <div class="schedule__details-header mb20">
         <h3 class="h3">{{ formatDateFull(selectedDate()) }}</h3>
+
+        @if (!isLastSlide() && activeWorkoutSession(); as session) {
+          <div class="schedule__details-actions">
+            <button
+              class="btn-icon"
+              type="button"
+              aria-label="Редактировать тренировку"
+              (click)="showUpdateModal(session)"
+            >
+              <svg icon="pen" class="icon16"></svg>
+            </button>
+            <button
+              class="btn-icon schedule__details-action--danger"
+              type="button"
+              aria-label="Удалить тренировку"
+              (click)="deleteWorkoutSession(session)"
+            >
+              <svg icon="trash" class="icon16"></svg>
+            </button>
+          </div>
+        }
       </div>
 
       <div class="schedule__details-content">

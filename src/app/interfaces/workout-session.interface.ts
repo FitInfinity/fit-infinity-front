@@ -31,6 +31,8 @@ export interface IWorkoutSessionCreate {
   notes?: string | null;
 }
 
+export type IWorkoutSessionUpdate = Partial<IWorkoutSessionCreate>;
+
 export type WorkoutSessionStatus = 'planned' | 'completed' | 'cancelled';
 
 export const WORKOUT_SESSION_STATUSES: {
