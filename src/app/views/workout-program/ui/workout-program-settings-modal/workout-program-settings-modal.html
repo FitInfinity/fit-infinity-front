@@ -1,0 +1,126 @@
+<app-modal-base>
+  <div class="common-modal program-settings-modal">
+    <div class="common-modal__header mb20">
+      <h3 class="h3">{{ modalTitle() }}</h3>
+      <button class="common-modal__close-btn" (click)="onClose()">
+        <svg icon="cross" class="icon24"></svg>
+      </button>
+    </div>
+
+    <div class="common-modal__content">
+      @if (isEditing()) {
+        <form id="formWorkoutProgram" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <label class="form-label mb20">
+            <span class="label-text">Название программы</span>
+            <input class="form-input" type="text" placeholder="Например: Push Day Power" formControlName="name">
+          </label>
+
+          <label class="form-label mb20">
+            <span class="label-text">Тип программы</span>
+            <select class="form-input" formControlName="type">
+              <option value="" disabled>Выберите тип</option>
+              @for (type of programTypes; track type) {
+                <option [value]="type">{{ translateProgramType(type) }}</option>
+              }
+            </select>
+          </label>
+        </form>
+
+        <!-- Список упражнений -->
+        <div class="program-exercises">
+          <div class="program-exercises__header mb12">
+            <span class="label-text">Упражнения</span>
+            <button class="btn-link" type="button" (click)="openAddExerciseModal()">
+              + Добавить упражнение
+            </button>
+          </div>
+
+          @if (exercises().length) {
+            <div cdkDropList (cdkDropListDropped)="dropExercise($event)" class="program-exercises__list">
+              @for (exercise of exercises(); track exercise.exerciseId) {
+                <div cdkDrag class="program-exercises__item">
+                  <div class="program-exercises__drag-handle" cdkDragHandle>
+                    <svg icon="grip-vertical" class="icon16"></svg>
+                  </div>
+
+                  <div class="program-exercises__order">{{ exercise.order }}</div>
+
+                  <div class="program-exercises__info">
+                    <div class="program-exercises__name">{{ exercise.name }}</div>
+                    <div class="program-exercises__params">
+                      <label class="program-exercises__param">
+                        <span>Подходы:</span>
+                        <input type="number" class="program-exercises__param-input" min="1"
+                               [value]="exercise.sets"
+                               (change)="updateSets(exercise.exerciseId, +$any($event.target).value)">
+                      </label>
+                      <label class="program-exercises__param">
+                        <span>Повторения:</span>
+                        <input type="number" class="program-exercises__param-input" min="1"
+                               [value]="exercise.reps"
+                               (change)="updateReps(exercise.exerciseId, +$any($event.target).value)">
+                      </label>
+                    </div>
+                  </div>
+
+                  <button class="btn-icon program-exercises__remove" type="button"
+                          (click)="removeExercise(exercise.exerciseId)">
+                    <svg icon="cross" class="icon16"></svg>
+                  </button>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="small-text center">Упражнения ещё не добавлены</p>
+          }
+        </div>
+      } @else {
+        <!-- Режим просмотра -->
+        <div class="exercise-view">
+          <div class="exercise-view__section">
+            <div class="exercise-view__label">Название</div>
+            <div class="exercise-view__name">{{ program()!.name }}</div>
+          </div>
+
+          <div class="exercise-view__section">
+            <div class="exercise-view__label">Тип</div>
+            <div class="exercise-view__value">
+              <span class="exercise-view__badge">{{ translateProgramType(program()!.type) }}</span>
+            </div>
+          </div>
+
+          @if (exercises().length) {
+            <div class="exercise-view__section">
+              <div class="exercise-view__label">Упражнения</div>
+              @for (exercise of exercises(); track exercise.exerciseId) {
+                <div class="program-exercises__view-item">
+                  <span class="program-exercises__view-order">{{ exercise.order }}.</span>
+                  <span class="program-exercises__view-name">{{ exercise.name }}</span>
+                  <span class="program-exercises__view-params">{{ exercise.sets }}×{{ exercise.reps }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        @if (program()!.isCustom) {
+          <div class="exercise-view__actions">
+            <button class="btn btn-primary" type="button" (click)="toggleEdit()">
+              <svg icon="pen" class="icon16"></svg> Редактировать
+            </button>
+            <button class="btn btn-danger" type="button" (click)="onDelete()">
+              <svg icon="trash" class="icon16"></svg> Удалить
+            </button>
+          </div>
+        }
+      }
+    </div>
+
+    @if (isEditing()) {
+      <div class="common-modal__action-btns">
+        <button class="btn btn-primary" type="submit" form="formWorkoutProgram">Сохранить</button>
+        <button class="btn btn-secondary" type="button" (click)="onCancel()">Отмена</button>
+      </div>
+    }
+  </div>
+</app-modal-base>

@@ -40,8 +40,7 @@ export class ModalService {
   }
 
   hide() {
-    if (!this.containerRef) return;
-
-    this.containerRef.clear();
+    if (!this.containerRef || this.containerRef.length === 0) return;
+    this.containerRef.remove(this.containerRef.length - 1);
   }
 }

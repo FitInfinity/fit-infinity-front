@@ -1,0 +1,49 @@
+<app-modal-base>
+  <div class="common-modal add-exercise-modal">
+    <div class="common-modal__header mb20">
+      <h3 class="h3">Добавить упражнения</h3>
+      <button class="common-modal__close-btn" (click)="confirm()">
+        <svg icon="cross" class="icon24"></svg>
+      </button>
+    </div>
+
+    <div class="common-modal__content">
+      <div class="add-exercise-modal__search mb12">
+        <svg class="icon17 add-exercise-modal__search-icon" icon="search"></svg>
+        <input class="form-input add-exercise-modal__search-input" type="text"
+               placeholder="Искать упражнение..." [formControl]="search">
+      </div>
+
+      <ul class="add-exercise-modal__filters mb12">
+        <li class="add-exercise-modal__filter"
+            [class.active]="!activeMuscleGroup()"
+            (click)="activeMuscleGroup.set(null); loadExercises()">Все</li>
+        @for (group of muscleGroups; track group) {
+          <li class="add-exercise-modal__filter"
+              [class.active]="activeMuscleGroup() === group"
+              (click)="selectMuscleGroup(group)">{{ translateMuscleGroup(group) }}</li>
+        }
+      </ul>
+
+      <ul class="add-exercise-modal__list">
+        @for (exercise of exercises(); track exercise.id) {
+          <li class="add-exercise-modal__item"
+              [class.selected]="isSelected(exercise.id)"
+              (click)="toggleExercise(exercise)">
+            <div class="add-exercise-modal__item-info">
+              <div class="add-exercise-modal__item-name">{{ exercise.name }}</div>
+              <div class="add-exercise-modal__item-group">{{ translateMuscleGroup(exercise.muscleGroup) }}</div>
+            </div>
+            <svg class="icon17" [icon]="isSelected(exercise.id) ? 'check' : 'plus'"></svg>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="common-modal__action-btns">
+      <button class="btn btn-primary" (click)="confirm()" [disabled]="!selected().length">
+        Добавить ({{ selected().length }})
+      </button>
+    </div>
+  </div>
+</app-modal-base>

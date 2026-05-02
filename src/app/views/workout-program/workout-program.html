@@ -1,7 +1,77 @@
 <div class="workout-program">
-  <h2 class="h2 mb20">Программы тренировок</h2>
+  <div class="workout-program__header mb20">
+    <h2 class="h2">Программы тренировок</h2>
+    <button class="btn btn-primary workout-program__btn" (click)="showCreateModal()">
+      <svg icon="plus" class="icon17"></svg>
+      Создать программу
+    </button>
+  </div>
 
-  <div class="content">
+  <div class="content workout-program__content">
+
+    <div class="filter content__filter mb16">
+      <div class="filter__search">
+        <svg class="icon17 filter__icon" icon="search"></svg>
+        <input class="filter__input" type="text" placeholder="Искать программу..." [formControl]="search">
+      </div>
+
+      <ul class="filter__categories">
+        <li class="filter__category"
+            [class.active]="!activeCategory()"
+            (click)="resetCategory()">Все</li>
+        @for (cat of categories; track cat) {
+          <li class="filter__category"
+              [class.active]="activeCategory() === cat"
+              (click)="selectCategory(cat)">{{ translateProgramCategory(cat) }}</li>
+        }
+      </ul>
+    </div>
+
+    <div class="program-list content__program-list">
+      @if (programs().length) {
+        <ul class="program-list__items">
+          @for (item of programs(); track item.id) {
+            <li class="program-card" (click)="showViewModal(item)">
+              <div class="program-card__info">
+                <div class="program-card__title">{{ item.name }}</div>
+                <div class="program-card__meta">
+                  <span class="program-card__type">{{ translateProgramType(item.type) }}</span>
+                  <span class="program-card__count">{{ item.exerciseCount }} упр.</span>
+                </div>
+              </div>
+              @if (item.isCustom) {
+                <div class="program-card__actions">
+                  <div class="btn-icon" (click)="showViewModal(item); $event.stopPropagation()">
+                    <svg icon="pen" class="icon16"></svg>
+                  </div>
+                  <div class="btn-icon" (click)="deleteProgram(item.id); $event.stopPropagation()">
+                    <svg icon="trash" class="icon16"></svg>
+                  </div>
+                </div>
+              }
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="small-text center">Создайте первую программу</p>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button class="pagination__btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">
+          <svg class="icon17" icon="chevron-left"></svg>
+        </button>
+        @for (page of pages(); track page) {
+          <button class="pagination__page" [class.active]="page === currentPage()" (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+        <button class="pagination__btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">
+          <svg class="icon17" icon="chevron-right"></svg>
+        </button>
+      </div>
+    }
 
   </div>
 </div>
