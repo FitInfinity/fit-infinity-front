@@ -1,7 +1,32 @@
 <div class="dashboard">
   <h2 class="h2 mb20">Главная</h2>
 
-  <div class="content">
+  <div class="dashboard__content">
+    <app-workout-calendar
+      [workoutSessions]="sessions()"
+      [selectedDate]="selectedDate()"
+      [compact]="true"
+      (dayClick)="selectDate($event)"
+      (monthChange)="onMonthChange($event)"
+    />
 
+    <section class="widget dashboard__selected-day">
+      <h3 class="h3 mb20">Тренировки на {{ formatShortDate(selectedDate()) }}</h3>
+
+      @if (selectedSessions().length) {
+        <div class="dashboard__session-list">
+          @for (session of selectedSessions(); track session.id) {
+            <div class="dashboard__session">
+              <span class="h4">{{ session.workoutProgram?.name ?? 'Тренировка' }}</span>
+              <span class="workout-session-status {{ session.status }}">
+                {{ getStatusLabel(session.status) }}
+              </span>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="small-text center">На выбранный день тренировок нет</p>
+      }
+    </section>
   </div>
 </div>

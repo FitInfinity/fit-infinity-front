@@ -1,0 +1,10 @@
+.workout-session-create-modal {
+  width: 420px;
+  max-width: 100%;
+
+  &__error {
+    margin-top: -10px;
+    margin-bottom: 14px;
+    color: var(--color-danger-text);
+  }
+}

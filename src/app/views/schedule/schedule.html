@@ -1,7 +1,141 @@
 <div class="schedule">
-  <h2 class="h2 mb20">Расписание</h2>
+  <h2 class="h2 schedule__title mb20">Расписание тренировок</h2>
 
-  <div class="content">
+  <div class="schedule__wrapper">
+    <div class="schedule__calendar-column">
+      <app-workout-calendar
+        [workoutSessions]="workoutSessions()"
+        [selectedDate]="selectedDate()"
+        [compact]="true"
+        (dayClick)="selectDate($event)"
+        (monthChange)="onMonthChange($event)"
+      />
 
+      <section class="widget schedule__upcoming">
+        <h3 class="h3 mb20">Запланированные тренировки (7 дней)</h3>
+
+        @if (upcomingWorkoutSessions().length) {
+          <div class="schedule__session-list">
+            @for (session of upcomingWorkoutSessions(); track session.id) {
+              <button
+                type="button"
+                class="workout-session-card"
+                (click)="selectDate(session.date)"
+              >
+                <span class="workout-session-card__date small-text">
+                  {{ formatShortDate(session.date) }}
+                </span>
+                <span class="workout-session-card__title h4">
+                  {{ session.workoutProgram?.name ?? 'Тренировка' }}
+                </span>
+                <span class="workout-session-status {{ session.status }}">
+                  {{ getStatusLabel(session.status) }}
+                </span>
+              </button>
+            }
+          </div>
+        } @else {
+          <p class="small-text center">Ближайших тренировок пока нет</p>
+        }
+      </section>
+    </div>
+
+    <section class="widget schedule__details">
+      <div class="schedule__details-header mb20">
+        <h3 class="h3">{{ formatDateFull(selectedDate()) }}</h3>
+      </div>
+
+      <div class="schedule__details-content">
+        @if (!isLastSlide() && activeWorkoutSession(); as session) {
+          <div class="schedule__info">
+            <div class="info-block info-block--wide">
+              <span class="info-block__label">Программа</span>
+              <strong class="h3">{{ session.workoutProgram?.name ?? 'Тренировка' }}</strong>
+            </div>
+
+            <div class="schedule__info-grid">
+              <div class="info-block">
+                <span class="info-block__label">Статус</span>
+                <span class="workout-session-status {{ session.status }}">
+                  {{ getStatusLabel(session.status) }}
+                </span>
+              </div>
+
+              <div class="info-block">
+                <span class="info-block__label">Длительность</span>
+                <span class="medium-text">
+                  {{ session.durationMin ? session.durationMin + ' мин' : '—' }}
+                </span>
+              </div>
+
+              <div class="info-block">
+                <span class="info-block__label">Настроение до</span>
+                <span class="medium-text info-block__emoji">
+                  {{ moodToEmoji(session.moodBefore) }}
+                </span>
+              </div>
+
+              <div class="info-block">
+                <span class="info-block__label">Настроение после</span>
+                <span class="medium-text info-block__emoji">
+                  {{ moodToEmoji(session.moodAfter) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="info-block info-block--wide">
+              <span class="info-block__label">Заметки</span>
+              <span class="medium-text">{{ session.notes ?? '—' }}</span>
+            </div>
+
+            <a class="btn btn-primary schedule__details-btn" routerLink="/workout-session">
+              Перейти к тренировке
+            </a>
+          </div>
+        } @else {
+          <div class="schedule__empty-day">
+            <p class="small-text center">
+              @if (selectedWorkoutSessions().length) {
+                Можно запланировать еще одну тренировку на этот день
+              } @else {
+                Нет тренировки на этот день
+              }
+            </p>
+
+            <button class="btn btn-primary schedule__plan-btn" type="button" (click)="showCreateModal()">
+              @if (selectedWorkoutSessions().length) {
+                Запланировать еще одну тренировку
+              } @else {
+                Запланировать тренировку
+              }
+            </button>
+          </div>
+        }
+
+        @if (selectedWorkoutSessions().length) {
+          <div class="session-nav">
+            <button
+              type="button"
+              class="session-nav__btn"
+              [disabled]="activeSessionIndex() === 0"
+              (click)="previousSession()"
+            >
+              ‹
+            </button>
+            <span class="session-nav__counter">
+              {{ activeSessionIndex() + 1 }} / {{ totalSlides() }}
+            </span>
+            <button
+              type="button"
+              class="session-nav__btn"
+              [disabled]="activeSessionIndex() === totalSlides() - 1"
+              (click)="nextSession()"
+            >
+              ›
+            </button>
+          </div>
+        }
+      </div>
+    </section>
   </div>
 </div>

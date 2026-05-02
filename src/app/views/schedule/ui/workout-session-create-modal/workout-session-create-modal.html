@@ -1,0 +1,57 @@
+<app-modal-base>
+  <div class="common-modal workout-session-create-modal">
+    <div class="common-modal__header mb20">
+      <h3 class="h3">Запланировать тренировку</h3>
+      <button class="common-modal__close-btn" type="button" (click)="onClose()">
+        <svg icon="cross" class="icon24"></svg>
+      </button>
+    </div>
+
+    <form
+      id="formWorkoutSessionCreate"
+      class="workout-session-create-modal__form"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+    >
+      <label class="form-label mb20">
+        <span class="label-text">Дата</span>
+        <input class="form-input" type="date" formControlName="date">
+      </label>
+
+      <label class="form-label mb20">
+        <span class="label-text">Программа тренировки</span>
+        <select class="form-input" formControlName="workoutProgramId">
+          <option [ngValue]="null">Без программы</option>
+          @for (program of programs(); track program.id) {
+            <option [ngValue]="program.id">{{ program.name }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="form-label mb20">
+        <span class="label-text">Заметки</span>
+        <textarea
+          class="form-textarea"
+          formControlName="notes"
+          placeholder="Например: легкая тренировка после работы"
+        ></textarea>
+      </label>
+
+      @if (error()) {
+        <p class="small-text workout-session-create-modal__error">{{ error() }}</p>
+      }
+    </form>
+
+    <div class="common-modal__action-btns">
+      <button
+        class="btn btn-primary"
+        type="submit"
+        form="formWorkoutSessionCreate"
+        [disabled]="isSaving()"
+      >
+        Сохранить
+      </button>
+      <button class="btn btn-secondary" type="button" (click)="onClose()">Отмена</button>
+    </div>
+  </div>
+</app-modal-base>

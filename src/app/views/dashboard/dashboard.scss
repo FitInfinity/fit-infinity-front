@@ -1,0 +1,35 @@
+.dashboard {
+  &__content {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  &__selected-day {
+    min-height: 180px;
+  }
+
+  &__session-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  &__session {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--color-surface);
+    border-radius: 16px;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .dashboard {
+    &__content {
+      grid-template-columns: 1fr;
+    }
+  }
+}

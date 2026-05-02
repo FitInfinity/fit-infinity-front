@@ -1,0 +1,69 @@
+<div class="workout-calendar widget" [class.workout-calendar--compact]="compact()">
+  <div class="workout-calendar__header">
+    <h3 class="workout-calendar__title">{{ periodLabel() }}</h3>
+
+    <div class="workout-calendar__controls">
+      <button
+        type="button"
+        class="workout-calendar__nav-btn"
+        aria-label="Предыдущий месяц"
+        (click)="changeMonth(-1)"
+      >
+        <svg icon="chevron-left" class="icon17"></svg>
+      </button>
+
+      <button
+        type="button"
+        class="workout-calendar__nav-btn"
+        aria-label="Следующий месяц"
+        (click)="changeMonth(1)"
+      >
+        <svg icon="chevron-right" class="icon17"></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="workout-calendar__weekdays">
+    @for (day of weekDays; track day) {
+      <span class="workout-calendar__weekday">{{ day }}</span>
+    }
+  </div>
+
+  <div class="workout-calendar__days">
+    @for (day of calendarDays(); track day.dateKey) {
+      <button
+        type="button"
+        class="workout-calendar__day"
+        [class.workout-calendar__day--outside]="!day.isCurrentMonth"
+        [class.workout-calendar__day--selected]="day.isSelected"
+        [class.workout-calendar__day--today]="day.isToday"
+        [disabled]="!day.isCurrentMonth"
+        (click)="selectDay(day)"
+      >
+        <span class="workout-calendar__day-number">{{ day.day }}</span>
+
+        <span class="workout-calendar__dots">
+          @for (session of day.sessions; track session.id) {
+            <span
+              class="workout-calendar__dot"
+              [class.workout-calendar__dot--planned]="session.status === 'planned'"
+              [class.workout-calendar__dot--completed]="session.status === 'completed'"
+              [class.workout-calendar__dot--cancelled]="session.status === 'cancelled'"
+            ></span>
+          }
+        </span>
+      </button>
+    }
+  </div>
+
+  @if (showLegend()) {
+    <div class="workout-calendar__legend">
+      @for (item of workoutStatuses; track item.status) {
+        <div class="workout-calendar__legend-item">
+          <span class="legend-dot" [style.background-color]="item.color"></span>
+          <span class="legend-label">{{ item.label }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>
