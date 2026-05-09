@@ -1,5 +1,5 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {
   IWorkoutSession,
   IWorkoutSessionProgress,
@@ -7,10 +7,11 @@ import {
   WORKOUT_SESSION_STATUSES,
   WorkoutSessionStatus,
 } from '../../interfaces/workout-session.interface';
-import { IProgramExercise, ProgramType } from '../../interfaces/workout-program.interface';
-import { WorkoutSessionService } from '../../shared/services/workout-session.service';
-import { fromDateKey, moodToEmoji } from '../../shared/utils/date.utils';
-import { translateMuscleGroup } from '../../shared/utils/muscle-group.utils';
+import {IProgramExercise, ProgramType} from '../../interfaces/workout-program.interface';
+import {WorkoutSessionService} from '../../shared/services/workout-session.service';
+import {fromDateKey, moodToEmoji} from '../../shared/utils/date.utils';
+import {translateMuscleGroup} from '../../shared/utils/muscle-group.utils';
+import {StatusBadge} from '../../design-system';
 
 type SetField = 'reps' | 'weight';
 
@@ -20,9 +21,11 @@ interface TrackerExercise extends IProgramExercise {
 
 @Component({
   selector: 'app-workout-session',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [FormsModule, StatusBadge],
   templateUrl: './workout-session.html',
   styleUrl: './workout-session.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkoutSession implements OnInit, OnDestroy {
   private workoutSessionService = inject(WorkoutSessionService);
@@ -47,11 +50,11 @@ export class WorkoutSession implements OnInit, OnDestroy {
   isSaving = signal(false);
 
   moods = [
-    { value: 1, emoji: '😞', label: 'Очень плохо' },
-    { value: 2, emoji: '😕', label: 'Плохо' },
-    { value: 3, emoji: '😐', label: 'Нормально' },
-    { value: 4, emoji: '🙂', label: 'Хорошо' },
-    { value: 5, emoji: '😄', label: 'Отлично' },
+    {value: 1, emoji: '😞', label: 'Очень плохо'},
+    {value: 2, emoji: '😕', label: 'Плохо'},
+    {value: 3, emoji: '😐', label: 'Нормально'},
+    {value: 4, emoji: '🙂', label: 'Хорошо'},
+    {value: 5, emoji: '😄', label: 'Отлично'},
   ];
 
   trackerExercises = computed<TrackerExercise[]>(() => {
@@ -254,7 +257,7 @@ export class WorkoutSession implements OnInit, OnDestroy {
           item.workoutExerciseId === exerciseId && item.setNumber < set.setNumber
         );
 
-        return { ...set, setNumber: previousSets.length + 1 };
+        return {...set, setNumber: previousSets.length + 1};
       });
     });
   }
@@ -275,7 +278,7 @@ export class WorkoutSession implements OnInit, OnDestroy {
   toggleSetCompleted(exerciseId: number, setNumber: number): void {
     this.trackerSets.update(list => list.map(set =>
       set.workoutExerciseId === exerciseId && set.setNumber === setNumber
-        ? { ...set, isCompleted: !set.isCompleted }
+        ? {...set, isCompleted: !set.isCompleted}
         : set
     ));
   }
@@ -293,7 +296,7 @@ export class WorkoutSession implements OnInit, OnDestroy {
   }
 
   getDateMonth(dateKey: string): string {
-    return fromDateKey(dateKey).toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '');
+    return fromDateKey(dateKey).toLocaleDateString('ru-RU', {month: 'short'}).replace('.', '');
   }
 
   getProgramTypeLabel(session: IWorkoutSession): string {

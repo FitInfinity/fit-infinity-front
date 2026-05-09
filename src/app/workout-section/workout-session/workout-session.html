@@ -156,9 +156,10 @@
                   </button>
                 }
 
-                <span class="workout-session-status {{ session.status }}">
-                  {{ getStatusLabel(session.status) }}
-                </span>
+                <app-status-badge [status]="session.status" />
+<!--                <span class="workout-session-status {{ session.status }}">-->
+<!--                  {{ getStatusLabel(session.status) }}-->
+<!--                </span>-->
                 <span class="session-card__chevron">{{ isExpanded(session.id) ? '⌃' : '⌄' }}</span>
               </span>
             </button>

@@ -70,7 +70,7 @@ export interface IWorkoutSessionSetPayload {
   isCompleted: boolean;
 }
 
-export type WorkoutSessionStatus = 'planned' | 'completed' | 'cancelled' | 'missed';
+export type WorkoutSessionStatus = 'planned' | 'completed' |  'cancelled';
 
 export const WORKOUT_SESSION_STATUSES: {
   status: WorkoutSessionStatus;
@@ -79,6 +79,5 @@ export const WORKOUT_SESSION_STATUSES: {
 }[] = [
   { status: 'planned', color: '#f49c12', label: 'Запланирована' },
   { status: 'completed', color: '#52b788', label: 'Завершена' },
-  { status: 'cancelled', color: '#ef4444', label: 'Отменена' },
-  { status: 'missed', color: '#ef4444', label: 'Пропущена' },
+  { status: 'cancelled', color: '#ef4444', label: 'Пропущена' },
 ];

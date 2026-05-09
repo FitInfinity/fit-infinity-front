@@ -335,7 +335,7 @@ textarea {
   background-color: #52b788 !important;
 }
 
-/* missed/cancelled — красный */
+/* cancelled — красный */
 .vc-dot.vc-red {
   background-color: #ef4444 !important;
 }
@@ -384,11 +384,6 @@ textarea {
   }
 
   &.cancelled {
-    color: var(--color-text-workout-status-cancelled);
-    background-color: var(--color-bg-workout-status-cancelled);
-  }
-
-  &.missed {
     color: var(--color-text-workout-status-cancelled);
     background-color: var(--color-bg-workout-status-cancelled);
   }
