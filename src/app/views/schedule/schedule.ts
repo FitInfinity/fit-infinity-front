@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { WorkoutCalendar } from '../../shared/components/workout-calendar/workout-calendar';
 import { WorkoutSessionService } from '../../shared/services/workout-session.service';
@@ -18,12 +18,15 @@ import {
   WorkoutSessionCreateModal,
 } from './ui/workout-session-create-modal/workout-session-create-modal';
 import { SvgIcon } from '../../shared/components/svg-icon/svg-icon';
+import {StatusBadge} from '../../design-system';
 
 @Component({
   selector: 'app-schedule',
-  imports: [RouterLink, WorkoutCalendar, SvgIcon],
+  standalone: true,
+  imports: [RouterLink, WorkoutCalendar, SvgIcon, StatusBadge],
   templateUrl: './schedule.html',
   styleUrl: './schedule.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Schedule implements OnInit {
   private workoutSessionService = inject(WorkoutSessionService);

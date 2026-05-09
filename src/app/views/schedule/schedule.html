@@ -28,9 +28,7 @@
                 <span class="workout-session-card__title h4">
                   {{ session.workoutProgram?.name ?? 'Тренировка' }}
                 </span>
-                <span class="workout-session-status {{ session.status }}">
-                  {{ getStatusLabel(session.status) }}
-                </span>
+                <app-status-badge [status]="session.status" />
               </button>
             }
           </div>

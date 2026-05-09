@@ -3,6 +3,10 @@
   [class.status-badge--planned]="status() === 'planned'"
   [class.status-badge--completed]="status() === 'completed'"
   [class.status-badge--cancelled]="status() === 'cancelled'"
+  [class.status-badge--legend]="variant() === 'legend'"
+  [class.status-badge--pill]="variant() === 'pill'"
 >
-  {{ label() }}
+  <div class="status-badge__label">
+    {{ label() }}
+  </div>
 </div>

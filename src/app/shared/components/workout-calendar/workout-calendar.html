@@ -60,8 +60,7 @@
     <div class="workout-calendar__legend">
       @for (item of workoutStatuses; track item.status) {
         <div class="workout-calendar__legend-item">
-          <span class="legend-dot" [style.background-color]="item.color"></span>
-          <span class="legend-label">{{ item.label }}</span>
+          <app-status-badge [status]="item.status" variant="legend" />
         </div>
       }
     </div>

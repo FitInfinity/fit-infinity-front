@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, input} from '@angular/core';
 import {WorkoutSessionStatus} from '../../../shared';
 import {getStatusLabel} from '../../../shared/utils';
+import {StatusBadgeVariant} from './status-badge.types';
 
 @Component({
   selector: 'app-status-badge',
@@ -12,6 +13,7 @@ import {getStatusLabel} from '../../../shared/utils';
 })
 export class StatusBadge {
   status = input.required<WorkoutSessionStatus>();
+  variant = input<StatusBadgeVariant>('pill');
 
   label = computed(() => getStatusLabel(this.status()));
 }

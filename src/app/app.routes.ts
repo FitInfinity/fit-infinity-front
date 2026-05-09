@@ -17,7 +17,7 @@ export const routes: Routes = [
       },
       {
         path: 'workout-session',
-        loadComponent: () => import('./workout-section/workout-session/workout-session').then(c => c.WorkoutSession),
+        loadComponent: () => import('./views/workout-session/workout-session').then(c => c.WorkoutSession),
       },
       {
         path: 'workout-program',

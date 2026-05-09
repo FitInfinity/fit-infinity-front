@@ -14,6 +14,7 @@ import {
 } from '../../../interfaces/workout-session.interface';
 import { fromDateKey, toDateKey } from '../../utils/date.utils';
 import { SvgIcon } from '../svg-icon/svg-icon';
+import {StatusBadge} from '../../../design-system';
 
 interface WorkoutCalendarDay {
   date: Date;
@@ -27,7 +28,8 @@ interface WorkoutCalendarDay {
 
 @Component({
   selector: 'app-workout-calendar',
-  imports: [SvgIcon],
+  standalone: true,
+  imports: [SvgIcon, StatusBadge],
   templateUrl: './workout-calendar.html',
   styleUrl: './workout-calendar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
