@@ -1,0 +1,8 @@
+<div
+  class="status-badge"
+  [class.status-badge--planned]="status() === 'planned'"
+  [class.status-badge--completed]="status() === 'completed'"
+  [class.status-badge--cancelled]="status() === 'cancelled'"
+>
+  {{ label() }}
+</div>

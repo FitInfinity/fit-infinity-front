@@ -1,0 +1,67 @@
+@use './primitive-colors' as *;
+
+// Semantic: Brand
+$color-primary: $brand-primary-500;
+$color-primary-hover: $brand-primary-600;
+$color-primary-active: $brand-primary-700;
+$color-primary-soft: rgba($brand-primary-500, 0.12);
+$color-primary-focus: rgba($brand-primary-500, 0.3);
+
+// Semantic: Background
+$color-background-page: $neutral-100;
+$color-background-layout: $neutral-0;
+$color-surface: #eef0f8;
+$color-surface-hover: #e4e7f2;
+$color-border: $neutral-200;
+
+// Semantic: Text
+$color-text-primary: $neutral-900;
+$color-text-secondary: $neutral-500;
+$color-text-inverse: $neutral-0;
+
+// Semantic: Button
+$button-primary-background: $brand-primary-600;
+$button-primary-background-hover: $brand-primary-700;
+$button-primary-text: $neutral-0;
+
+$button-secondary-background: transparent;
+$button-secondary-border: $color-border;
+$button-secondary-text: $color-primary;
+
+// Semantic: Status
+$color-success: $green-500;
+$color-warning: $yellow-500;
+$color-danger: $red-500;
+
+$color-danger-border: $red-100;
+$color-danger-text: $red-500;
+
+// Semantic: Workout Status
+$workout-status-planned-background: rgba($yellow-500, 0.12);
+$workout-status-planned-text: $yellow-500;
+
+$workout-status-completed-background: rgba($green-500, 0.12);
+$workout-status-completed-text: $green-500;
+
+$workout-status-cancelled-background: rgba($red-500, 0.12);
+$workout-status-cancelled-text: $red-500;
+
+// Semantic: Dark Theme
+$color-background-page-dark: $dark-page;
+$color-background-layout-dark: $dark-layout;
+$color-surface-dark: $dark-surface;
+$color-surface-hover-dark: $dark-surface-hover;
+$color-border-dark: $dark-border;
+
+$color-text-primary-dark: $neutral-0;
+$color-text-secondary-dark: $dark-text-secondary;
+
+$color-primary-dark: $brand-primary-300;
+$color-primary-soft-dark: rgba($brand-primary-300, 0.16);
+$color-primary-focus-dark: rgba($brand-primary-300, 0.32);
+
+$color-success-dark: $green-400;
+$color-warning-dark: $yellow-400;
+$color-danger-dark: $red-400;
+$color-danger-border-dark: #842226;
+$color-danger-text-dark: $red-400;

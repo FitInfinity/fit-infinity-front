@@ -1,0 +1,62 @@
+// Primitive: Font Family
+$font-family-body: 'Inter', sans-serif;
+
+// Primitive: Font Weight
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extra-bold: 800;
+
+// Primitive: Font Size
+$font-size-12: 12px;
+$font-size-14: 14px;
+$font-size-16: 16px;
+$font-size-20: 20px;
+$font-size-24: 24px;
+
+// Primitive: Line Height
+$line-height-100: 100%;
+$line-height-tight: 120%;
+$line-height-base: 133%;
+$line-height-relaxed: 140%;
+$line-height-control: 143%;
+
+// Semantic: Body
+$body-sm-font-family: $font-family-body;
+$body-sm-font-size: $font-size-12;
+$body-sm-font-weight: $font-weight-regular;
+$body-sm-line-height: $line-height-base;
+
+$body-md-font-family: $font-family-body;
+$body-md-font-size: $font-size-14;
+$body-md-font-weight: $font-weight-regular;
+$body-md-line-height: $line-height-base;
+
+// Semantic: Title Primary
+$title-primary-md-font-family: $font-family-body;
+$title-primary-md-font-size: $font-size-16;
+$title-primary-md-font-weight: $font-weight-bold;
+$title-primary-md-line-height: $line-height-control;
+
+$title-primary-lg-font-family: $font-family-body;
+$title-primary-lg-font-size: $font-size-20;
+$title-primary-lg-font-weight: $font-weight-bold;
+$title-primary-lg-line-height: $line-height-relaxed;
+
+// Semantic: Label Primary
+$label-primary-sm-font-family: $font-family-body;
+$label-primary-sm-font-size: $font-size-12;
+$label-primary-sm-line-height: $line-height-base;
+$label-primary-sm-font-weight-regular: $font-weight-regular;
+$label-primary-sm-font-weight-medium: $font-weight-medium;
+$label-primary-sm-font-weight-semibold: $font-weight-semibold;
+$label-primary-sm-font-weight-bold: $font-weight-bold;
+
+$label-primary-md-font-family: $font-family-body;
+$label-primary-md-font-size: $font-size-14;
+$label-primary-md-line-height: $line-height-control;
+$label-primary-md-font-weight-regular: $font-weight-regular;
+$label-primary-md-font-weight-medium: $font-weight-medium;
+$label-primary-md-font-weight-semibold: $font-weight-semibold;
+$label-primary-md-font-weight-bold: $font-weight-bold;

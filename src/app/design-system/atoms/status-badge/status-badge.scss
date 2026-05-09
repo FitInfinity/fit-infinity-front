@@ -1,0 +1,28 @@
+@use '../../tokens' as *;
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  min-height: 24px;
+  padding: $spacing-4 $spacing-10;
+  border-radius: $radius-badge;
+  @include label-primary-sm($font-weight-semibold);
+  color: $color-text-primary;
+  background-color: $color-surface;
+
+  &--planned {
+    color: $workout-status-planned-text;
+    background-color: $workout-status-planned-background;
+  }
+
+  &--completed {
+    color: $workout-status-completed-text;
+    background-color: $workout-status-completed-background;
+  }
+
+  &--cancelled {
+    color: $workout-status-cancelled-text;
+    background-color: $workout-status-cancelled-background;
+  }
+}
