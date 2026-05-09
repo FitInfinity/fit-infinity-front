@@ -1,7 +1,356 @@
-<div class="workout-session">
-  <h2 class="h2 mb20">Тренировки</h2>
+@if (activeTrackingSession(); as trackerSession) {
+  <div class="session-tracker">
+    <header class="session-tracker__top">
+      <div>
+        <h2 class="h3">{{ getSessionTitle(trackerSession) }}</h2>
+        <span class="small-text">{{ elapsedLabel() }}</span>
+      </div>
 
-  <div class="content">
+      <div class="session-tracker__actions">
+        <button class="btn btn-secondary" type="button" (click)="saveProgress()" [disabled]="isSaving()">
+          Сохранить прогресс
+        </button>
+        <button class="btn btn-success" type="button" (click)="openFinishDialog()" [disabled]="isSaving()">
+          Завершить
+        </button>
+        <button class="btn btn-secondary" type="button" (click)="closeTracker()">Выйти</button>
+      </div>
+    </header>
 
+    @if (trackerExercises().length) {
+      <nav class="session-tracker__steps">
+        @for (exercise of trackerExercises(); track exercise.exerciseId; let index = $index) {
+          <button
+            class="session-tracker__step"
+            type="button"
+            [class.active]="activeExerciseIndex() === index"
+            (click)="setActiveExercise(index)"
+          >
+            {{ index + 1 }}
+          </button>
+        }
+        <span class="small-text">{{ trackerExercises().length }} упр.</span>
+      </nav>
+
+      <div class="tracker-exercises">
+        @for (exercise of trackerExercises(); track exercise.exerciseId; let index = $index) {
+          <article class="tracker-exercise" [class.active]="activeExerciseIndex() === index">
+            <button class="tracker-exercise__header" type="button" (click)="setActiveExercise(index)">
+              <span class="tracker-exercise__number">{{ index + 1 }}</span>
+              <span class="tracker-exercise__info">
+                <strong>{{ exercise.name }}</strong>
+                <small>{{ exercise.setsList.length }} подх. · {{ translateMuscleGroup(exercise.muscleGroup) }}</small>
+              </span>
+              <span class="tracker-exercise__chevron">{{ activeExerciseIndex() === index ? '⌃' : '⌄' }}</span>
+            </button>
+
+            @if (activeExerciseIndex() === index) {
+              @if (isStrength(trackerSession)) {
+                <div class="tracker-exercise__sets">
+                  @for (set of exercise.setsList; track set.setNumber) {
+                    <div class="tracker-set">
+                      <span class="tracker-set__number">{{ set.setNumber }}</span>
+                      <input
+                        class="tracker-set__input"
+                        type="number"
+                        min="0"
+                        inputmode="numeric"
+                        [ngModel]="set.reps"
+                        (ngModelChange)="updateSet(exercise.exerciseId, set.setNumber, 'reps', $event)"
+                      >
+                      <span class="small-text">повт.</span>
+                      <input
+                        class="tracker-set__input"
+                        type="number"
+                        min="0"
+                        step="0.5"
+                        inputmode="decimal"
+                        [ngModel]="set.weight"
+                        (ngModelChange)="updateSet(exercise.exerciseId, set.setNumber, 'weight', $event)"
+                      >
+                      <span class="small-text">кг</span>
+                      <button
+                        class="tracker-set__check"
+                        type="button"
+                        [class.done]="set.isCompleted"
+                        (click)="toggleSetCompleted(exercise.exerciseId, set.setNumber)"
+                        aria-label="Отметить подход"
+                      ></button>
+                      <button
+                        class="tracker-set__remove"
+                        type="button"
+                        (click)="removeSet(exercise.exerciseId, set.setNumber)"
+                        aria-label="Удалить подход"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  }
+
+                  <button class="btn-link" type="button" (click)="addSet(exercise.exerciseId)">+ Добавить подход</button>
+                </div>
+              } @else {
+                <p class="small-text tracker-exercise__note">
+                  Для этой программы фиксируем общие показатели тренировки в финальном шаге.
+                </p>
+              }
+            }
+          </article>
+        }
+      </div>
+
+      <footer class="session-tracker__bottom">
+        <button class="btn btn-secondary" type="button" (click)="previousExercise()" [disabled]="activeExerciseIndex() === 0">
+          Назад
+        </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          (click)="nextExercise()"
+          [disabled]="activeExerciseIndex() === trackerExercises().length - 1"
+        >
+          Следующее упражнение
+        </button>
+      </footer>
+    } @else {
+      <section class="widget session-tracker__empty">
+        <h3 class="h3">В программе нет упражнений</h3>
+        <p class="small-text center">
+          Можно заполнить общие показатели тренировки и завершить ее.
+        </p>
+        <button class="btn btn-primary" type="button" (click)="openFinishDialog()">Заполнить результат</button>
+      </section>
+    }
   </div>
-</div>
+} @else {
+  <div class="workout-session">
+    <h2 class="h2 mb20">Тренировки</h2>
+
+    @if (sessions().length) {
+      <div class="workout-session__list">
+        @for (session of sessions(); track session.id) {
+          <article class="session-card" [class.expanded]="isExpanded(session.id)">
+            <button class="session-card__summary" type="button" (click)="toggleSession(session)">
+              <span class="session-card__date">
+                <span>{{ getDateMonth(session.date) }}</span>
+                <strong>{{ getDateDay(session.date) }}</strong>
+              </span>
+
+              <span class="session-card__main">
+                <strong>{{ getSessionTitle(session) }}</strong>
+                <small>
+                  @if (session.durationMin) {
+                    {{ session.durationMin }} мин ·
+                  }
+                  {{ getProgramTypeLabel(session) }}
+                  @if (session.moodBefore || session.moodAfter) {
+                    · {{ moodToEmoji(session.moodBefore) }} → {{ moodToEmoji(session.moodAfter) }}
+                  }
+                </small>
+              </span>
+
+              <span class="session-card__right">
+                @if (session.status === 'planned') {
+                  <button class="session-card__start" type="button" (click)="openStartMoodDialog(session); $event.stopPropagation()">
+                    ▶ Старт
+                  </button>
+                }
+
+                <span class="workout-session-status {{ session.status }}">
+                  {{ getStatusLabel(session.status) }}
+                </span>
+                <span class="session-card__chevron">{{ isExpanded(session.id) ? '⌃' : '⌄' }}</span>
+              </span>
+            </button>
+
+            @if (isExpanded(session.id)) {
+              <div class="session-card__details">
+                <div class="session-card__stats">
+                  <div class="info-block">
+                    <span class="info-block__label">Дата</span>
+                    <strong>{{ session.date }}</strong>
+                  </div>
+                  <div class="info-block">
+                    <span class="info-block__label">Длительность</span>
+                    <strong>{{ session.durationMin ? session.durationMin + ' мин' : '—' }}</strong>
+                  </div>
+                  <div class="info-block">
+                    <span class="info-block__label">Настроение до</span>
+                    <strong>{{ moodToEmoji(session.moodBefore) }}</strong>
+                  </div>
+                  <div class="info-block">
+                    <span class="info-block__label">Настроение после</span>
+                    <strong>{{ moodToEmoji(session.moodAfter) }}</strong>
+                  </div>
+
+                  @if (hasHeartRate(session)) {
+                    <div class="info-block">
+                      <span class="info-block__label">Средний пульс</span>
+                      <strong>{{ session.avgHeartRate ? session.avgHeartRate + ' уд/мин' : '—' }}</strong>
+                    </div>
+                  }
+
+                  @if (hasDistance(session)) {
+                    <div class="info-block">
+                      <span class="info-block__label">Дистанция</span>
+                      <strong>{{ session.distanceKm ? session.distanceKm + ' км' : '—' }}</strong>
+                    </div>
+                  }
+                </div>
+
+                @if (session.workoutProgram?.exercises?.length) {
+                  <div class="session-card__program">
+                    @for (exercise of session.workoutProgram?.exercises ?? []; track exercise.exerciseId) {
+                      <span>{{ exercise.order }}. {{ exercise.name }}</span>
+                    }
+                  </div>
+                }
+
+                <div class="session-card__buttons">
+                  @if (session.status === 'planned') {
+                    <button class="btn btn-success" type="button" (click)="openStartMoodDialog(session)">
+                      Старт
+                    </button>
+                    <button class="btn btn-primary" type="button" (click)="openProgressTracker(session)">
+                      Заполнить результат
+                    </button>
+                    <button class="btn btn-danger" type="button" (click)="cancelWorkout(session)">
+                      Отменить
+                    </button>
+                  } @else {
+                    <button class="btn btn-primary" type="button" (click)="openProgressTracker(session)">
+                      Редактировать результат
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </article>
+        }
+      </div>
+    } @else {
+      <section class="widget workout-session__empty">
+        <h3 class="h3 center">Тренировок пока нет</h3>
+        <p class="small-text center">Запланируйте тренировку в расписании, и она появится здесь.</p>
+      </section>
+    }
+  </div>
+}
+
+@if (moodDialogSession(); as session) {
+  <div class="workout-overlay">
+    <div class="workout-dialog">
+      <h3 class="h3">Как самочувствие?</h3>
+      <p class="small-text center">Перед началом тренировки</p>
+
+      <div class="mood-picker">
+        @for (mood of moods; track mood.value) {
+          <button
+            type="button"
+            class="mood-picker__item"
+            [class.active]="selectedStartMood() === mood.value"
+            [attr.aria-label]="mood.label"
+            (click)="selectedStartMood.set(mood.value)"
+          >
+            {{ mood.emoji }}
+          </button>
+        }
+      </div>
+
+      <button class="btn btn-primary workout-dialog__primary" type="button" (click)="confirmStartWorkout()" [disabled]="isSaving()">
+        Начать тренировку
+      </button>
+      <button class="workout-dialog__link" type="button" (click)="closeStartMoodDialog()">Отмена</button>
+    </div>
+  </div>
+}
+
+@if (finishDialogOpen()) {
+  @if (activeTrackingSession(); as session) {
+  <div class="workout-overlay">
+    <div class="workout-dialog workout-dialog--wide">
+      <h3 class="h3">Завершить тренировку</h3>
+      <p class="small-text center">Заполни итоговые показатели</p>
+
+      <div class="finish-form">
+        <div>
+          <span class="label-text">Настроение до</span>
+          <div class="mood-picker mood-picker--small">
+            @for (mood of moods; track mood.value) {
+              <button
+                type="button"
+                class="mood-picker__item"
+                [class.active]="finishMoodBefore() === mood.value"
+                (click)="finishMoodBefore.set(mood.value)"
+              >
+                {{ mood.emoji }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div>
+          <span class="label-text">Настроение после</span>
+          <div class="mood-picker mood-picker--small">
+            @for (mood of moods; track mood.value) {
+              <button
+                type="button"
+                class="mood-picker__item"
+                [class.active]="finishMoodAfter() === mood.value"
+                (click)="finishMoodAfter.set(mood.value)"
+              >
+                {{ mood.emoji }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <label class="form-label">
+          <span class="label-text">Длительность, мин</span>
+          <input
+            class="form-input"
+            type="number"
+            min="1"
+            [ngModel]="finishDurationMin()"
+            (ngModelChange)="finishDurationMin.set($event === '' ? null : +$event)"
+          >
+        </label>
+
+        @if (hasHeartRate(session)) {
+          <label class="form-label">
+            <span class="label-text">Средний пульс</span>
+            <input
+              class="form-input"
+              type="number"
+              min="1"
+              [ngModel]="finishAvgHeartRate()"
+              (ngModelChange)="finishAvgHeartRate.set($event === '' ? null : +$event)"
+            >
+          </label>
+        }
+
+        @if (hasDistance(session)) {
+          <label class="form-label">
+            <span class="label-text">Дистанция, км</span>
+            <input
+              class="form-input"
+              type="number"
+              min="0"
+              step="0.01"
+              [ngModel]="finishDistanceKm()"
+              (ngModelChange)="finishDistanceKm.set($event === '' ? null : +$event)"
+            >
+          </label>
+        }
+      </div>
+
+      <div class="workout-dialog__actions">
+        <button class="btn btn-primary" type="button" (click)="completeWorkout()" [disabled]="isSaving()">
+          Сохранить
+        </button>
+        <button class="btn btn-secondary" type="button" (click)="closeFinishDialog()">Отмена</button>
+      </div>
+    </div>
+  </div>
+  }
+}

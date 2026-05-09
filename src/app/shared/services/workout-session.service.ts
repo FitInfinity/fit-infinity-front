@@ -6,6 +6,8 @@ import {
   IWorkoutSession,
   IWorkoutSessionCreate,
   IWorkoutSessionListResponse,
+  IWorkoutSessionProgress,
+  IWorkoutSessionStart,
   IWorkoutSessionUpdate,
 } from '../../interfaces/workout-session.interface';
 import { toDateKey } from '../utils/date.utils';
@@ -59,6 +61,12 @@ export class WorkoutSessionService {
       .pipe(tap(res => this.workoutSessionByPage.set(res.items)));
   }
 
+  fetchSession(id: number) {
+    return this.http
+      .get<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions/${id}`)
+      .pipe(tap(session => this.upsertSession(session)));
+  }
+
   createSession(payload: IWorkoutSessionCreate) {
     return this.http
       .post<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions`, payload)
@@ -77,6 +85,30 @@ export class WorkoutSessionService {
           this.upsertSession(session);
         }),
       );
+  }
+
+  startSession(id: number, payload: IWorkoutSessionStart) {
+    return this.http
+      .post<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions/${id}/start`, payload)
+      .pipe(tap(session => this.upsertSession(session)));
+  }
+
+  saveProgress(id: number, payload: IWorkoutSessionProgress) {
+    return this.http
+      .put<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions/${id}/progress`, payload)
+      .pipe(tap(session => this.upsertSession(session)));
+  }
+
+  completeSession(id: number, payload: IWorkoutSessionProgress) {
+    return this.http
+      .post<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions/${id}/complete`, payload)
+      .pipe(tap(session => this.upsertSession(session)));
+  }
+
+  cancelSession(id: number) {
+    return this.http
+      .post<IWorkoutSession>(`${this.baseApiUrl}/workout-sessions/${id}/cancel`, {})
+      .pipe(tap(session => this.upsertSession(session)));
   }
 
   deleteSession(id: number) {

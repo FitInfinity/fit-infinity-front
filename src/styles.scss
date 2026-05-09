@@ -387,6 +387,11 @@ textarea {
     color: var(--color-text-workout-status-cancelled);
     background-color: var(--color-bg-workout-status-cancelled);
   }
+
+  &.missed {
+    color: var(--color-text-workout-status-cancelled);
+    background-color: var(--color-bg-workout-status-cancelled);
+  }
 }
 
 .legend-dot {
