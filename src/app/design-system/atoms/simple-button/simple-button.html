@@ -1,0 +1,26 @@
+<button
+  class="simple-button"
+  [class.simple-button--primary]="variant() === 'primary'"
+  [class.simple-button--secondary]="variant() === 'secondary'"
+  [class.simple-button--success]="variant() === 'success'"
+  [class.simple-button--danger]="variant() === 'danger'"
+  [class.simple-button--sm]="size() === 'sm'"
+  [class.simple-button--md]="size() === 'md'"
+  [class.simple-button--lg]="size() === 'lg'"
+  [disabled]="disabled() || isLoading()"
+  (click)="actionClick.emit(variant())"
+  type="button">
+  <span class="simple-button__icon-left">
+    <ng-content select=".left"></ng-content>
+  </span>
+
+  @if (isLoading()) {
+    <span class="simple-button__spinner"></span>
+  }
+
+  <span class="simple-button__text">{{ text() }}</span>
+
+  <span class="simple-button__icon-right">
+    <ng-content select=".right"></ng-content>
+  </span>
+</button>

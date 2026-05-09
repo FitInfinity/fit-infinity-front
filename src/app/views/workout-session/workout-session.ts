@@ -11,7 +11,7 @@ import {IProgramExercise, ProgramType} from '../../interfaces/workout-program.in
 import {WorkoutSessionService} from '../../shared/services/workout-session.service';
 import {fromDateKey, moodToEmoji} from '../../shared/utils/date.utils';
 import {translateMuscleGroup} from '../../shared/utils/muscle-group.utils';
-import {StatusBadge} from '../../design-system';
+import {SimpleButton, StatusBadge, SvgIcon} from '../../design-system';
 
 type SetField = 'reps' | 'weight';
 
@@ -22,7 +22,7 @@ interface TrackerExercise extends IProgramExercise {
 @Component({
   selector: 'app-workout-session',
   standalone: true,
-  imports: [FormsModule, StatusBadge],
+  imports: [FormsModule, StatusBadge, SimpleButton, SvgIcon],
   templateUrl: './workout-session.html',
   styleUrl: './workout-session.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal} from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { WorkoutCalendar } from '../../shared/components/workout-calendar/workout-calendar';
 import { WorkoutSessionService } from '../../shared/services/workout-session.service';
 import { ModalService } from '../../shared/components/modal/services/modal.service';
@@ -18,12 +18,12 @@ import {
   WorkoutSessionCreateModal,
 } from './ui/workout-session-create-modal/workout-session-create-modal';
 import { SvgIcon } from '../../shared/components/svg-icon/svg-icon';
-import {StatusBadge} from '../../design-system';
+import {SimpleButton, StatusBadge} from '../../design-system';
 
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [RouterLink, WorkoutCalendar, SvgIcon, StatusBadge],
+  imports: [RouterLink, WorkoutCalendar, SvgIcon, StatusBadge, SimpleButton],
   templateUrl: './schedule.html',
   styleUrl: './schedule.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +31,7 @@ import {StatusBadge} from '../../design-system';
 export class Schedule implements OnInit {
   private workoutSessionService = inject(WorkoutSessionService);
   private modalService = inject(ModalService);
+  private router = inject(Router);
 
   workoutSessions = this.workoutSessionService.workoutSessions;
   upcomingWorkoutSessions = this.workoutSessionService.upcomingWorkoutSessions;
@@ -103,6 +104,11 @@ export class Schedule implements OnInit {
 
   private loadMonth(year: number, month: number): void {
     this.workoutSessionService.fetchByMonth(year, month).subscribe();
+  }
+
+  // TODO: реализовать страницу просмотра тренровки и редиректить именно на нее в дальнейшем
+  goToWorkoutSession(session: IWorkoutSession): void {
+    this.router.navigate(['/workout-session']);
   }
 
   protected readonly formatDateFull = formatDateFull;

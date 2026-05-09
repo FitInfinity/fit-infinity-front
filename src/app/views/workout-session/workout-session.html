@@ -151,15 +151,18 @@
 
               <span class="session-card__right">
                 @if (session.status === 'planned') {
-                  <button class="session-card__start" type="button" (click)="openStartMoodDialog(session); $event.stopPropagation()">
-                    ▶ Старт
-                  </button>
+                  <app-simple-button
+                    text="Старт"
+                    variant="success"
+                    size="sm"
+                    (click)="$event.stopPropagation()"
+                    (actionClick)="openStartMoodDialog(session)" >
+                      <app-svg-icon class="left" name="play" />
+                    </app-simple-button>
                 }
 
                 <app-status-badge [status]="session.status" />
-<!--                <span class="workout-session-status {{ session.status }}">-->
-<!--                  {{ getStatusLabel(session.status) }}-->
-<!--                </span>-->
+
                 <span class="session-card__chevron">{{ isExpanded(session.id) ? '⌃' : '⌄' }}</span>
               </span>
             </button>
@@ -208,20 +211,27 @@
                 }
 
                 <div class="session-card__buttons">
+                  <app-simple-button
+                    text="Детали тренировки"
+                    variant="secondary"
+                    [fullWidthMobile]="true"
+                    (actionClick)="openProgressTracker(session)"/>
+
                   @if (session.status === 'planned') {
-                    <button class="btn btn-success" type="button" (click)="openStartMoodDialog(session)">
-                      Старт
-                    </button>
-                    <button class="btn btn-primary" type="button" (click)="openProgressTracker(session)">
-                      Заполнить результат
-                    </button>
-                    <button class="btn btn-danger" type="button" (click)="cancelWorkout(session)">
-                      Отменить
-                    </button>
+                    <app-simple-button
+                      text="Заполнить результат"
+                      [fullWidthMobile]="true"
+                      (actionClick)="openProgressTracker(session)"/>
+                    <app-simple-button
+                      text="Отменить"
+                      variant="danger"
+                      [fullWidthMobile]="true"
+                      (actionClick)="cancelWorkout(session)"/>
                   } @else {
-                    <button class="btn btn-primary" type="button" (click)="openProgressTracker(session)">
-                      Редактировать результат
-                    </button>
+                    <app-simple-button
+                      text="Редактировать результат"
+                      [fullWidthMobile]="true"
+                      (actionClick)="openProgressTracker(session)"/>
                   }
                 </div>
               </div>

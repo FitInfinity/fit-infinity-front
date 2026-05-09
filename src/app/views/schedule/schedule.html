@@ -75,9 +75,7 @@
             <div class="schedule__info-grid">
               <div class="info-block">
                 <span class="info-block__label">Статус</span>
-                <span class="workout-session-status {{ session.status }}">
-                  {{ getStatusLabel(session.status) }}
-                </span>
+                <app-status-badge [status]="session.status" />
               </div>
 
               <div class="info-block">
@@ -107,9 +105,10 @@
               <span class="medium-text">{{ session.notes ?? '—' }}</span>
             </div>
 
-            <a class="btn btn-primary schedule__details-btn" routerLink="/workout-session">
-              Перейти к тренировке
-            </a>
+            <app-simple-button
+              text="Перейти к тренировке"
+              [fullWidthAlways]="true"
+              (actionClick)="goToWorkoutSession(session)" />
           </div>
         } @else {
           <div class="schedule__empty-day">
@@ -121,13 +120,9 @@
               }
             </p>
 
-            <button class="btn btn-primary schedule__plan-btn" type="button" (click)="showCreateModal()">
-              @if (selectedWorkoutSessions().length) {
-                Запланировать еще одну тренировку
-              } @else {
-                Запланировать тренировку
-              }
-            </button>
+            <app-simple-button
+              [text]="selectedWorkoutSessions().length ? 'Запланировать еще одну тренировку' : 'Запланировать тренировку'"
+              (actionClick)="showCreateModal()" />
           </div>
         }
 
